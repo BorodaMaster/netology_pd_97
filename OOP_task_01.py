@@ -11,8 +11,12 @@ class Student:
         self.grades = {}
 
     def __str__(self):
-        return "Name: {}\nSurname: {}\nAverage score: {}\nCourses in progress: {}\nFinished courses: {}" \
-            .format(self.name, self.surname, self.grades, self.courses_in_progress, self.finished_courses)
+        return "\nName: {}\nSurname: {}\nAverage score: {:.2f}\nCourses in progress: {}\nFinished courses: {}" \
+            .format(self.name, self.surname, sum(sum(self.grades.values(), [])) / len(sum(self.grades.values(), [])), self.courses_in_progress, self.finished_courses)
+
+    def __lt__(self, other):
+        print("\n{} {} vs. {} {}".format(self.name, self.surname, other.name, other.surname))
+        return sum(sum(self.grades.values(), [])) / len(sum(self.grades.values(), [])) < sum(sum(other.grades.values(), [])) / len(sum(other.grades.values(), []))
 
     def rate_lecturer(self, lecturer, course, grade):
         if isinstance(lecturer,
@@ -35,12 +39,16 @@ class Mentor:
 
 class Lecturer(Mentor):
     def __str__(self):
-        return "Name: {}\nSurname: {}\nAverage score: {}".format(self.name, self.surname, self.grades)
+        return "\nName: {}\nSurname: {}\nAverage score: {:.2f}".format(self.name, self.surname, sum(sum(self.grades.values(), [])) / len(sum(self.grades.values(), [])))
+
+    def __lt__(self, other):
+        print("\n{} {} vs. {} {}".format(self.name, self.surname, other.name, other.surname))
+        return sum(sum(self.grades.values(), [])) / len(sum(self.grades.values(), [])) < sum(sum(other.grades.values(), [])) / len(sum(other.grades.values(), []))
 
 
 class Reviewer(Mentor):
     def __str__(self):
-        return "Name: {}\nSurname: {}".format(self.name, self.surname)
+        return "\nName: {}\nSurname: {}".format(self.name, self.surname)
 
     def rate_hw(self, student, course, grade):
         if isinstance(student,
@@ -52,7 +60,29 @@ class Reviewer(Mentor):
         else:
             return 'Error...'
 
-# creating students Bo and Erin and attaching course/s to student
+def avg_hw_scope(course, students):
+    scope = []
+    count_scope = 0
+    for student in students:
+        if student.grades.get(course):
+            scope += student.grades[course]
+            count_scope += len(student.grades[course])
+
+    return "Average scope homework {:.2f} for course {}".format(sum(scope) / count_scope, course)
+
+def avg_lecture_scope(course, lecturers):
+    scope = []
+    count_scope = 0
+    for lecturer in lecturers:
+        if lecturer.grades.get(course):
+            scope += lecturer.grades[course]
+            count_scope += len(lecturer.grades[course])
+    return "Average scope lecture {:.2f} for course {}".format(sum(scope) / count_scope, course)
+
+
+## Creating classes and fill in data
+
+# creating student/s Bo and Erin and attaching course/s to student
 student_python = Student("Bo", "Chen", "male")
 student_java = Student("Erin", "Meyer", "female")
 
@@ -61,19 +91,23 @@ student_python.finished_courses = "Programming 101"
 
 student_java.courses_in_progress = ["Java", "Git"]
 
-# creating lecturer Dawn and Zuzana and attaching course/s
+# creating lecturer/s Dawn and Zuzana and attaching course/s
 senior_lecturer = Lecturer("Dawn", "Casey")
 regular_lecturer = Lecturer("Zuzana", "Krchova")
 
 senior_lecturer.courses_attached = ["Python", "Java"]
-regular_lecturer.courses_attached = ["Git"]
+regular_lecturer.courses_attached = ["Git", "Python"]
 
-# rating lecturer¶
-scores_lecturer_python = random.sample(range(6, 10), 4)
+# rating lecturer
+scores_regular_lecturer_python = random.sample(range(2, 10), 7)
+scores_senior_lecturer_python = random.sample(range(6, 10), 4)
 scores_lecturer_java = random.sample(range(6, 10), 4)
-scores_lecturer_git = random.sample(range(6, 10), 4)
+scores_lecturer_git = random.sample(range(2, 10), 6)
 
-for score in scores_lecturer_python:
+for score in scores_regular_lecturer_python:
+    student_python.rate_lecturer(regular_lecturer, "Python", score)
+
+for score in scores_senior_lecturer_python:
     student_python.rate_lecturer(senior_lecturer, "Python", score)
 
 for score in scores_lecturer_java:
@@ -83,14 +117,17 @@ for score in scores_lecturer_git:
     student_java.rate_lecturer(regular_lecturer, "Git", score)
     student_python.rate_lecturer(regular_lecturer, "Git", score)
 
-# creating reviewer Zanna and attaching course/s
+# creating reviewer/s Zanna and Hana and attaching course/s
 junior_reviewer = Reviewer("Zanna", "Coldhawk")
 junior_reviewer.courses_attached = ["Python", "Java"]
 
+regular_reviewer = Reviewer("Hana", "Ticha")
+regular_reviewer.courses_attached = ["Git"]
 
 # rating homeworks of students
-scores_student_python = random.sample(range(5, 10), 5)
+scores_student_python = random.sample(range(4, 10), 6)
 scores_student_java = random.sample(range(5, 10), 5)
+scores_student_git = random.sample(range(1, 10), 7)
 
 for score in scores_student_python:
     junior_reviewer.rate_hw(student_python, "Python", score)
@@ -98,36 +135,35 @@ for score in scores_student_python:
 for score in scores_student_java:
     junior_reviewer.rate_hw(student_java, "Java", score)
 
-# Print result
+for score in scores_student_git:
+    regular_reviewer.rate_hw(student_python, "Git", score)
+    regular_reviewer.rate_hw(student_java, "Git", score)
+
+
+## Print result
+
+# students
 print(student_python)
 print(student_java)
 
+# lecturers
 print(senior_lecturer)
 print(regular_lecturer)
 
-# TODO
-# "Как лучше реализовать подчет среднего, данный способ не работает?"
+# reviewers
+print(junior_reviewer)
+print(regular_reviewer)
 
-# class Lecturer2(Mentor):
-#     grades = {'Python': [8, 8, 9], 'Java': [10, 9, 8]}
-#
-#     def avg_score(self):
-#         total_score, count_score = 0
-#
-#         for key, value in self.grades:
-#             total_score += sum(value)
-#             count_score += len(value)
-#
-#         return "{:.2f}".format(total_score / count_score)
-#
-#     def __str__(self):
-#         return "Name: {}\nSurname: {}\nAverage score: {}".format(self.name, self.surname, self.avg_score())
-#
-# senior_lecturer2 = Lecturer2("Dawn", "Casey")
-# print(senior_lecturer2)
+# compare students
+print(student_python < student_java)
 
-# TODO
-"Как перенисти grades из класса Mentor в Lecturer?"
+# compare lecturers
+print(regular_lecturer < senior_lecturer)
 
-# TODO
-"Не понятно что делать в задание №4"
+# run functions
+print()
+# average homework scope by course
+print(avg_hw_scope("Java", [student_python, student_java]))
+
+# average lecture scope by course
+print(avg_lecture_scope("Python", [regular_lecturer, senior_lecturer]))

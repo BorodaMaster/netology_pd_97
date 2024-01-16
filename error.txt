@@ -1,0 +1,273 @@
+Результат
+============================= test session starts ==============================
+platform linux -- Python 3.10.13, pytest-7.4.4, pluggy-1.3.0
+rootdir: /code
+collected 3 items
+
+test_main.py F.F                                                         [100%]
+
+=================================== FAILURES ===================================
+__________________ test_find_uk_city[coordinates0-Liverpool] ___________________
+
+self = <Response [401]>, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+
+        if not self.encoding and self.content and len(self.content) > 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+
+        try:
+>           return complexjson.loads(self.text, **kwargs)
+
+/usr/local/lib/python3.10/site-packages/requests/models.py:971:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.10/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+/usr/local/lib/python3.10/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <json.decoder.JSONDecoder object at 0x7fc7f08c12d0>
+s = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>HTTP 401: Missing API Key</title></head><body style..._API_KEY</b></i></p><p>For help, please use the <a href="https://maps.co/contact/">contact form</a>.</p></body></html>'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+>           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+/usr/local/lib/python3.10/json/decoder.py:355: JSONDecodeError
+
+During handling of the above exception, another exception occurred:
+
+coordinates = [('55.7514952', '37.618153095505875'), ('52.3727598', '4.8936041'), ('53.4071991', '-2.99168')]
+vacation = 'Liverpool'
+
+    @pytest.mark.parametrize('coordinates,vacation', [
+        ([
+            ('55.7514952', '37.618153095505875'),
+            ('52.3727598', '4.8936041'),
+            ('53.4071991', '-2.99168')
+        ], 'Liverpool'),
+        ([
+            ('48.2083537', '16.3725042'),
+            ('52.628606', '1.29227'),
+            ('55.7514952', '37.618153095505875')
+        ], 'Norwich'),
+        ([
+             ('45.4641943', '9.1896346'),
+             ('41.8933203', '12.4829321'),
+             ('51.7520131', '-1.2578499')
+         ], 'Oxford'),
+    ])
+    def test_find_uk_city(coordinates, vacation):
+>       assert find_uk_city(coordinates) == vacation
+
+test_main.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+main.py:11: in find_uk_city
+    city_info = resp.json()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <Response [401]>, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+
+        if not self.encoding and self.content and len(self.content) > 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+
+        try:
+            return complexjson.loads(self.text, **kwargs)
+        except JSONDecodeError as e:
+            # Catch JSON-related errors and raise as requests.JSONDecodeError
+            # This aliases json.JSONDecodeError and simplejson.JSONDecodeError
+>           raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E           requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+/usr/local/lib/python3.10/site-packages/requests/models.py:975: JSONDecodeError
+____________________ test_find_uk_city[coordinates2-Oxford] ____________________
+
+self = <Response [401]>, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+
+        if not self.encoding and self.content and len(self.content) > 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+
+        try:
+>           return complexjson.loads(self.text, **kwargs)
+
+/usr/local/lib/python3.10/site-packages/requests/models.py:971:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.10/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+/usr/local/lib/python3.10/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <json.decoder.JSONDecoder object at 0x7fc7f08c12d0>
+s = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>HTTP 401: Missing API Key</title></head><body style..._API_KEY</b></i></p><p>For help, please use the <a href="https://maps.co/contact/">contact form</a>.</p></body></html>'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+>           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+/usr/local/lib/python3.10/json/decoder.py:355: JSONDecodeError
+
+During handling of the above exception, another exception occurred:
+
+coordinates = [('45.4641943', '9.1896346'), ('41.8933203', '12.4829321'), ('51.7520131', '-1.2578499')]
+vacation = 'Oxford'
+
+    @pytest.mark.parametrize('coordinates,vacation', [
+        ([
+            ('55.7514952', '37.618153095505875'),
+            ('52.3727598', '4.8936041'),
+            ('53.4071991', '-2.99168')
+        ], 'Liverpool'),
+        ([
+            ('48.2083537', '16.3725042'),
+            ('52.628606', '1.29227'),
+            ('55.7514952', '37.618153095505875')
+        ], 'Norwich'),
+        ([
+             ('45.4641943', '9.1896346'),
+             ('41.8933203', '12.4829321'),
+             ('51.7520131', '-1.2578499')
+         ], 'Oxford'),
+    ])
+    def test_find_uk_city(coordinates, vacation):
+>       assert find_uk_city(coordinates) == vacation
+
+test_main.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+main.py:11: in find_uk_city
+    city_info = resp.json()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <Response [401]>, kwargs = {}
+
+    def json(self, **kwargs):
+        r"""Returns the json-encoded content of a response, if any.
+
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+
+        if not self.encoding and self.content and len(self.content) > 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+                    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+
+        try:
+            return complexjson.loads(self.text, **kwargs)
+        except JSONDecodeError as e:
+            # Catch JSON-related errors and raise as requests.JSONDecodeError
+            # This aliases json.JSONDecodeError and simplejson.JSONDecodeError
+>           raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E           requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+/usr/local/lib/python3.10/site-packages/requests/models.py:975: JSONDecodeError
+=========================== short test summary info ============================
+FAILED test_main.py::test_find_uk_city[coordinates0-Liverpool] - requests.exc...
+FAILED test_main.py::test_find_uk_city[coordinates2-Oxford] - requests.except...
+========================= 2 failed, 1 passed in 23.46s =========================

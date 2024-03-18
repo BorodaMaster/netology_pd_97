@@ -8,15 +8,13 @@ def create_tables(conn):
             client_id SERIAL PRIMARY KEY,
             first_name VARCHAR(40) NOT NULL,
             last_name VARCHAR(40) NOT NULL,
-            email VARCHAR(40) NOT NULL
-        );
+            email VARCHAR(40) NOT NULL);
         """)
         cur.execute("""
         CREATE TABLE IF NOT EXISTS client_phone(
             phone_id SERIAL PRIMARY KEY,
             client_id SERIAL NOT NULL REFERENCES client(client_id),
-            phone VARCHAR(11) NOT NULL
-        );
+            phone VARCHAR(11) NOT NULL);
         """)
         conn.commit()
 
@@ -54,8 +52,7 @@ def delete_client(conn, client_id):
 def add_phone(conn, client_id, phone):
     with conn.cursor() as cur:
         cur.execute("""
-        INSERT INTO client_phone(client_id, phone)
-        VALUES(%s, %s);
+        INSERT INTO client_phone(client_id, phone) VALUES(%s, %s);
         """, (client_id, phone))
         conn.commit()
 
@@ -95,29 +92,29 @@ def find_client(conn, first_name=None, last_name=None, email=None, phone=None):
     with conn.cursor() as cur:
         if first_name:
             cur.execute("""
-                    SELECT * FROM client WHERE first_name=%s;
-                    """, (first_name,))
+            SELECT * FROM client WHERE first_name=%s;
+            """, (first_name,))
             result = cur.fetchall()
         elif last_name:
             cur.execute("""
-                    SELECT * FROM client WHERE last_name=%s;
-                    """, (last_name,))
+            SELECT * FROM client WHERE last_name=%s;
+            """, (last_name,))
             result = cur.fetchall()
         elif email:
             cur.execute("""
-                    SELECT * FROM client WHERE email=%s;
-                    """, (email,))
+            SELECT * FROM client WHERE email=%s;
+            """, (email,))
             result = cur.fetchall()
 
         elif phone:
             cur.execute("""
-                    SELECT client_id FROM client_phone WHERE phone=%s;
-                    """, (phone,))
+            SELECT client_id FROM client_phone WHERE phone=%s;
+            """, (phone,))
             client_id = cur.fetchall()
             if client_id:
                 cur.execute("""
-                        SELECT * FROM client WHERE client_id=%s;
-                        """, (client_id[0],))
+                SELECT * FROM client WHERE client_id=%s;
+                """, (client_id[0],))
                 result = cur.fetchall()
 
     return result

@@ -1,0 +1,7 @@
+# Project exclude paths
+/venv/
+.idea
+token.json
+credentials.json
+result.json
+**/__pycache__/*

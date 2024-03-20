@@ -83,7 +83,7 @@ if __name__ == "__main__":
 # SQl result
 """
     book_title	                                shop_name	price	date
-    Programming Python, 4th Edition	            Amazon	    16.00	2018-10-25
-    Programming Python, 4th Edition	            Labirint	50.05	2018-10-25
-    Natural Language Processing with Python	    Labirint	50.05	2018-10-25
+    Programming Python, 4th Edition	            Amazon      16.00	2018-10-25
+    Programming Python, 4th Edition	            Labirint    50.05	2018-10-25
+    Natural Language Processing with Python	    Labirint    50.05	2018-10-25
 """

@@ -58,12 +58,28 @@ if __name__ == "__main__":
         print(f"{s.id} - {s.name}")
 
     publisher_id = input("Please input ID a publisher: ")
+    print()
 
+    # Request with relationship
+    # TODO how to get all rows?
     q_purchase_invoices = conn.session.query(Book).join(Stock.shop).join(Stock.book).join(Stock.shop)\
         .filter(Book.id_publisher == publisher_id)
 
     for purchase_invoice in q_purchase_invoices.all():
         print(purchase_invoice.id, purchase_invoice.title, purchase_invoice.id_publisher)
+
+    print()
+
+    # Request without relationship
+    q_purchase_invoices_sql = conn.session.query(Book)\
+        .with_entities(Book.title, Shop.name, Sale.price, Sale.date_sale)\
+        .join(Stock, Stock.id_book == Book.id) \
+        .join(Shop, Shop.id == Stock.id_shop) \
+        .join(Sale, Sale.id_stock == Stock.id) \
+        .filter(Book.id_publisher == publisher_id).all()
+
+    for book_title, shop_name, price, date_sale in q_purchase_invoices_sql:
+        print(book_title, shop_name, price, date_sale, sep='\t')
 
 # SQL query
 """

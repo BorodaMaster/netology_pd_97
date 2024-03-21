@@ -45,13 +45,17 @@ def import_data(conn):
 if __name__ == "__main__":
     conn = Connect()
 
+    # Create tables
     if create_table:
         print(f"Connect to db: {DSN}")
         create_tables(engine)
+
+    # Load data
     if load_data:
         print("Load data:")
         import_data(conn)
 
+    # Get data from db
     q_publisher = conn.session.query(Publisher).all()
 
     for s in q_publisher:

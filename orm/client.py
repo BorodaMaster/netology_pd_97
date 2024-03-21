@@ -77,9 +77,9 @@ if __name__ == "__main__":
     # Request without relationship
     q_purchase_invoices_sql = conn.session.query(Book)\
         .with_entities(Book.title, Shop.name, Sale.price, Sale.date_sale)\
-        .join(Stock, Stock.id_book == Book.id) \
-        .join(Shop, Shop.id == Stock.id_shop) \
-        .join(Sale, Sale.id_stock == Stock.id) \
+        .join(Stock, Stock.id_book == Book.id)\
+        .join(Shop, Shop.id == Stock.id_shop)\
+        .join(Sale, Sale.id_stock == Stock.id)\
         .filter(Book.id_publisher == publisher_id).all()
 
     for book_title, shop_name, price, date_sale in q_purchase_invoices_sql:

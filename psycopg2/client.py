@@ -130,6 +130,8 @@ customers = [
     ('Linnda', 'Williams', 'linnda.williams@sakilacustomer.org'),
     ('Barbara', 'Jones', 'barbara.jones@sakilacustomer.org')]
 
+# TODO reformat code (move to function) and add __name__
+
 with psycopg2.connect(database="netology_db", user="postgres", password="RtpZV7ow", host="localhost") as conn:
     with conn.cursor() as cur:
         # Create tables if not exists

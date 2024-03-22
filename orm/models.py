@@ -54,8 +54,3 @@ class Sale(Base):
     id_stock = sq.Column(sq.Integer, sq.ForeignKey("stock.id"), nullable=False)
 
     stock = relationship(Stock, backref="stocks")
-
-
-# for table in Base.metadata.tables.items():
-#     print("Table metadata...")
-#     print(table)

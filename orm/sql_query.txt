@@ -1,0 +1,27 @@
+# SQL query
+
+SELECT
+book.title as book_title,
+shop.name as shop_name,
+sale.price as price,
+sale.date_sale as date
+FROM book
+JOIN stock ON stock.id_book = book.id
+JOIN shop ON shop.id = stock.id_shop
+JOIN sale ON sale.id_stock = stock.id
+WHERE id_publisher = 1
+ORDER BY shop.name
+
+
+# SQl result
+book_title	                                shop_name	price	date
+Programming Python, 4th Edition	            Amazon      16.00	2018-10-25
+Programming Python, 4th Edition	            Labirint    50.05	2018-10-25
+Natural Language Processing with Python	    Labirint    50.05	2018-10-25
+
+# SQL query without relationship
+session.query(Book).with_entities(Book.title, Shop.name, Sale.price, Sale.date_sale)\
+    .join(Stock, Stock.id_book == Book.id)\
+    .join(Shop, Shop.id == Stock.id_shop)\
+    .join(Sale, Sale.id_stock == Stock.id)\
+    .filter(Book.id_publisher == publisher_id).all()

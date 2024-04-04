@@ -1,6 +1,6 @@
 import re
-
 import requests
+
 from bs4 import BeautifulSoup
 
 URL = "https://habr.com/ru/articles/"

@@ -1,1 +1,1 @@
-ООП и работа с API
+Netology PD-97

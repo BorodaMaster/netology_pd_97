@@ -1,0 +1,48 @@
+{
+    "name": "hello_world",
+    "timestamp": "2024-04-12 16:40:02.552160",
+    "args": [],
+    "kwargs": {},
+    "result": "Hello World"
+},
+{
+    "name": "summator",
+    "timestamp": "2024-04-12 16:40:02.552166",
+    "args": [
+        2,
+        2
+    ],
+    "kwargs": {},
+    "result": 4
+},
+{
+    "name": "div",
+    "timestamp": "2024-04-12 16:40:02.552167",
+    "args": [
+        6,
+        2
+    ],
+    "kwargs": {},
+    "result": 3.0
+},
+{
+    "name": "summator",
+    "timestamp": "2024-04-12 16:40:02.552166",
+    "args": [
+        4.3
+    ],
+    "kwargs": {
+        "b": 2.2
+    },
+    "result": 6.5
+},
+{
+    "name": "summator",
+    "timestamp": "2024-04-12 16:40:02.552166",
+    "args": [],
+    "kwargs": {
+        "a": 0,
+        "b": 0
+    },
+    "result": 0
+},

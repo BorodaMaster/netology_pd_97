@@ -5,9 +5,14 @@ from main import show_all_docs_info
 from main import check_document_existence
 from main import delete_doc
 from main import add_new_doc
+from client import get_postcode
 
 
 class TestMain(TestCase):
+
+    def test_get_postcode(self):
+        result = get_postcode("33162")
+        self.assertEqual(result["country"], "United States")
 
     @patch('builtins.input', side_effect=["2255 876299", "passport", "Василий Уткин", "3"])
     def test_append_doc_to_shelf(self, mock_input):

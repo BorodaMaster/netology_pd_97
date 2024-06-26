@@ -16,5 +16,23 @@
       "author": "Джордж Оруэл",
       "pub_date": "2016-12-06"
     }
+  },
+  {
+    "model": "books.book",
+    "pk": 3,
+    "fields": {
+      "name": "1983",
+      "author": "Джордж Оруэл",
+      "pub_date": "2016-12-03"
+    }
+  },
+  {
+    "model": "books.book",
+    "pk": 4,
+    "fields": {
+      "name": "1987",
+      "author": "Джордж Оруэл",
+      "pub_date": "2016-12-10"
+    }
   }
 ]

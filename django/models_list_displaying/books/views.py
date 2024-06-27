@@ -16,7 +16,7 @@ def books_view(request):
 
 
 def pub_date(request, pub_date):
-    template = 'books/books_list.html'
+    template = 'books/pub_date.html'
 
     books_objects = Book.objects.filter(pub_date=pub_date)
     books = [element for element in books_objects.values()]

@@ -21,4 +21,3 @@ class Command(BaseCommand):
                 release_date=phone["release_date"],
                 lte_exists=phone["lte_exists"],
             )
-            item.save()

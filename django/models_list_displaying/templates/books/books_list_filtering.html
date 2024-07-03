@@ -17,14 +17,7 @@
                     </div>
                 </div>
             {% endfor %}
+            <p><a href="{% if previous_date %} {% url 'pub_date' pub_date=previous_date %} {% else %} #!; {% endif %}">< {{ previous_date }}</a> <a href="{% if next_date %} {% url 'pub_date' pub_date=next_date %} {% else %} #!; {% endif %}">{{ next_date }} ></a></p>
         </div>
-
-        {% if page.has_previous %}
-            <a class="button button-primary" href="?page={{ page.previous_page_number }}">⟵</a>
-        {% endif %}
-        <a class="button disabled" href="">{{ page.number }}</a>
-        {% if page.has_next %}
-            <a class="button button-primary" href="?page={{ page.next_page_number }}">⟶</a>
-        {% endif %}
     </div>
 {% endblock %}

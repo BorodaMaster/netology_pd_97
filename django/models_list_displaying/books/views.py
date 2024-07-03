@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.core.paginator import Paginator
+from django.db.models import F
 
 from books.models import Book
 
@@ -15,19 +15,30 @@ def books_view(request):
     return render(request, template, context)
 
 
-def pub_date(request, pub_date):
-    template = 'books/pub_date.html'
+def books_view_filtered(request, pub_date):
+    template = 'books/books_list_filtering.html'
 
-    books_objects = Book.objects.filter(pub_date=pub_date)
+    # Get books by date
+    books_objects = Book.objects.filter(pub_date__exact=pub_date)
     books = [element for element in books_objects.values()]
 
-    paginator = Paginator(books, 25)
-    current_page = request.GET.get('page', 1)
-    page = paginator.get_page(current_page)
+    # Get previews and next dates
+    previous_dates = Book.objects.filter(pub_date__lt=pub_date).order_by("-pub_date").values("pub_date")
+    next_dates = Book.objects.filter(pub_date__gt=pub_date).order_by("pub_date").values("pub_date")
+
+    if previous_dates:
+        previous_date = previous_dates[0]["pub_date"].strftime('%Y-%m-%d')
+    else:
+        previous_date = ""
+    if next_dates:
+        next_date = next_dates[0]["pub_date"].strftime('%Y-%m-%d')
+    else:
+        next_date = ""
 
     context = {
-        'page': page,
-        'books': page.object_list
+        'books': books,
+        "previous_date": previous_date,
+        "next_date": next_date,
     }
 
     return render(request, template, context)

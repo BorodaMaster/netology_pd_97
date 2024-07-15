@@ -11,10 +11,9 @@ class Sensor(models.Model):
 
 
 class Measurement(models.Model):
-    sensor_id = models.ForeignKey('Sensor', on_delete=models.CASCADE)
+    sensor_id = models.ForeignKey('Sensor', related_name='measurement', on_delete=models.CASCADE)
     temperature = models.DecimalField(max_digits=5, decimal_places=2, null=False)
     created_at = models.DateField(auto_now=True)
 
     def save(self, *args, **kwargs):
-
         super(Measurement, self).save(*args, **kwargs)

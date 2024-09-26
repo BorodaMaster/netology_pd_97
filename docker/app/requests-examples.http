@@ -1,0 +1,126 @@
+#  python manage.py migrate --run-syncdb
+
+@baseUrl = http://localhost:8000/api/v1
+
+###
+# Create product one
+POST {{baseUrl}}/products/
+Content-Type: application/json
+
+{
+  "title": "Помидор",
+  "description": "Лучшие помидоры на рынке"
+}
+
+###
+# Create product second
+POST {{baseUrl}}/products/
+Content-Type: application/json
+
+{
+  "title": "Огурец",
+  "description": "Лучшие кубанские огурцы на рынке"
+}
+
+###
+
+# Get product
+GET {{baseUrl}}/products/
+Content-Type: application/json
+
+###
+# Update product
+PATCH {{baseUrl}}/products/5/
+Content-Type: application/json
+
+{
+  "title": "Огурец",
+  "description": "Лучшие ростовские огурцы на рынке"
+}
+
+###
+# Delete product
+DELETE {{baseUrl}}/products/4/
+Content-Type: application/json
+
+###
+
+# Search product by name or description
+GET {{baseUrl}}/products/?q=Помидор
+Content-Type: application/json
+
+###
+# Create stock one
+POST {{baseUrl}}/stocks/
+Content-Type: application/json
+
+{
+  "address": "Пискаревский",
+  "positions": [
+    {
+      "product": 5,
+      "quantity": 100,
+      "price": 180.00
+    }
+  ]
+}
+
+###
+# Create stock second
+POST {{baseUrl}}/stocks/
+Content-Type: application/json
+
+{
+  "address": "Софийский",
+  "positions": [
+    {
+      "product": 5,
+      "quantity": 150,
+      "price": 60.00
+    }
+  ]
+}
+
+###
+
+# Update product on stock
+PATCH {{baseUrl}}/stocks/5/
+Content-Type: application/json
+
+{
+  "positions": [
+    {
+      "product": 5,
+      "quantity": 150,
+      "price": 60.00
+    }
+  ]
+}
+
+###
+
+# Update product on stock
+PATCH {{baseUrl}}/stocks/6/
+Content-Type: application/json
+
+{
+  "positions": [
+    {
+      "product": 6,
+      "quantity": 250,
+      "price": 90.00
+    }
+  ]
+}
+
+###
+# Search stock by product
+GET {{baseUrl}}/stocks/?products=6
+Content-Type: application/json
+
+###
+# All stocks
+GET {{baseUrl}}/stocks/
+Content-Type: application/json
+
+###

@@ -1,0 +1,40 @@
+services:
+  frontend:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    volumes:
+      - staticfiles:/static
+    ports:
+      - 80:80
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - staticfiles:/app/staticfiles
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    restart: always
+    shm_size: 128mb
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: RtpZV7ow
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres_data:
+  staticfiles:

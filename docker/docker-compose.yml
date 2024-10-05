@@ -3,6 +3,7 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile
+    restart: always
     volumes:
       - staticfiles:/static
     ports:

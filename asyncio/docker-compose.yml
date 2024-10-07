@@ -1,0 +1,24 @@
+services:
+  db_asyncio:
+    image: postgres:15
+    restart: always
+    shm_size: 128mb
+    ports:
+      - 5434:5432
+    volumes:
+      - postgres_data_asyncio:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  pgadmin_asyncio:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 8084:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+
+volumes:
+  postgres_data_asyncio:

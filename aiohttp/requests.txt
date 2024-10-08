@@ -1,0 +1,44 @@
+@baseUrl = http://localhost:8080
+
+###
+# Create advertisement
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "header": "Продам гараж",
+  "description": "Площадь 30м2, центр города",
+  "owner": "Иванов И.И."
+}
+
+###
+# Create advertisement
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "header": "Продам квартиру",
+  "description": "Площадь 130м2, около центра города",
+  "owner": "Петров И.И."
+}
+
+###
+# Get advertisement with id=3
+GET {{baseUrl}}/3
+Content-Type: application/json
+
+###
+# Delete advertisement with id=2
+DELETE {{baseUrl}}/2
+Content-Type: application/json
+
+###
+# Update advertisement
+PATCH {{baseUrl}}/3
+Content-Type: application/json
+
+{
+  "header": "Продам квартиру",
+  "description": "Площадь 130м2, около центра города, возможна ипотека",
+  "owner": "Петров И.И."
+}

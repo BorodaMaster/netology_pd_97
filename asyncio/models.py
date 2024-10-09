@@ -1,6 +1,6 @@
 import os
 
-from sqlalchemy import JSON, Integer
+from sqlalchemy import String, Integer
 from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -29,7 +29,19 @@ class SwapiPeople(Base):
     __tablename__ = "swapi_people"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    json: Mapped[dict] = mapped_column(JSON)
+    birth_year: Mapped[str] = mapped_column(String(64), nullable=False)
+    eye_color: Mapped[str] = mapped_column(String(64), nullable=False)
+    films: Mapped[str] = mapped_column(String(256), nullable=False)
+    gender: Mapped[str] = mapped_column(String(64), nullable=False)
+    hair_color: Mapped[str] = mapped_column(String(64), nullable=False)
+    height: Mapped[str] = mapped_column(String(64), nullable=False)
+    homeworld: Mapped[str] = mapped_column(String(64), nullable=False)
+    mass: Mapped[str] = mapped_column(String(64), nullable=False)
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
+    skin_color: Mapped[str] = mapped_column(String(64), nullable=False)
+    species: Mapped[str] = mapped_column(String(256), nullable=False)
+    starships: Mapped[str] = mapped_column(String(256), nullable=False)
+    vehicles: Mapped[str] = mapped_column(String(256), nullable=False)
 
 
 async def init_orm():

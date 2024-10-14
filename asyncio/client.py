@@ -36,19 +36,18 @@ async def insert_people(people_list):
 async def main():
     await init_orm()
 
+    list_tasks = []
+
     async with aiohttp.ClientSession() as session_http:
         list_people = await asyncio.gather(get_count_people(session_http))
         count = list_people[0].get('count')
 
-        coros = (get_people(i, session_http) for i in range(1, 0 + 3))
+        coros = (get_people(i, session_http) for i in range(1, count + 3))
         for coros_chunk in more_itertools.chunked(coros, MAX_REQUESTS):
             people_list = await asyncio.gather(*coros_chunk)
-            asyncio.create_task(insert_people(people_list))
+            list_tasks.append(asyncio.create_task(insert_people(people_list)))
 
-        tasks = asyncio.all_tasks()
-        main_task = asyncio.current_task()
-        tasks.remove(main_task)
-        await asyncio.gather(*tasks)
+        await asyncio.gather(**list_tasks)
 
 
 asyncio.run(main())

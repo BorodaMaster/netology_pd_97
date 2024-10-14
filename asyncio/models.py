@@ -39,9 +39,9 @@ class SwapiPeople(Base):
     mass: Mapped[str] = mapped_column(String(64), nullable=False)
     name: Mapped[str] = mapped_column(String(64), nullable=False)
     skin_color: Mapped[str] = mapped_column(String(64), nullable=False)
-    species: Mapped[str] = mapped_column(String(256), nullable=False)
-    starships: Mapped[str] = mapped_column(String(256), nullable=False)
-    vehicles: Mapped[str] = mapped_column(String(256), nullable=False)
+    species: Mapped[str.join()] = mapped_column(String(256), nullable=False)
+    starships: Mapped[str.join()] = mapped_column(String(256), nullable=False)
+    vehicles: Mapped[str.join()] = mapped_column(String(256), nullable=False)
 
 
 async def init_orm():

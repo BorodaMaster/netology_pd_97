@@ -28,14 +28,17 @@ class AdvertisementResponse(pydantic.BaseModel):
 
 
 @app.get("/advertisement/{advertisement_id}", response_model=schema.GetAdvertisementResponse)
-async def get_advtg(advertisement_id: int, session: SessionDependency,
-                    q: Annotated[str | None, fastapi.Query(max_length=50)] = None):
-    if advertisement_id:
-        advtg = await crud.get_item(session, models.Advertisement, advertisement_id)
-    elif q:
-        advtg = await crud.get_item_description(session, models.Advertisement, q)
+async def get_advtg(advertisement_id: int, session: SessionDependency):
+    advtg = await crud.get_item(session, models.Advertisement, advertisement_id)
 
     return advtg.dict
+
+
+@app.get("/advertisement", response_model=schema.GetAdvertisementResponse)
+async def search_advtg(session: SessionDependency, q: Annotated[str, fastapi.Query(max_length=50)]):
+    advtg = await crud.search_item(session, q)
+
+    return advtg
 
 
 @app.post("/advertisement", response_model=schema.CreateAdvertisementResponse)

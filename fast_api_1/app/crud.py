@@ -28,7 +28,7 @@ async def get_item(session: AsyncSession, orm_cls: ORM_CLASS, item_id: int) -> O
     return orm_obj
 
 
-async def search_item(session: AsyncSession, orm_cls: ORM_CLASS, qs_param: str) -> ORM_OBJECT:
+async def search_item(session: AsyncSession, orm_cls: ORM_CLASS, qs_param: str):
     statement = select(orm_cls).where(orm_cls.description.like(f"%{qs_param}%"))
     orm_obj = await session.execute(statement)
     result = orm_obj.scalars().all()

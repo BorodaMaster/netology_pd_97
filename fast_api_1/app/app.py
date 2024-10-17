@@ -36,7 +36,7 @@ async def get_advtg(advertisement_id: int, session: SessionDependency):
 
 @app.get("/advertisement", response_model=schema.GetAdvertisementResponse)
 async def search_advtg(session: SessionDependency, q: Annotated[str, fastapi.Query(max_length=50)]):
-    advtg = await crud.search_item(session, q)
+    advtg = await crud.search_item(session, models.Advertisement, q)
 
     return advtg
 

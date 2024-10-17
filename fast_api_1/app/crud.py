@@ -1,5 +1,4 @@
 # CRUD (Create, Read, Update, Delete)
-import json
 
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
@@ -7,7 +6,7 @@ from fastapi.encoders import jsonable_encoder
 from models import ORM_CLASS, ORM_OBJECT
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql import text
+from sqlalchemy.sql import select
 
 
 async def add_item(session: AsyncSession, item: ORM_OBJECT) -> ORM_OBJECT:
@@ -29,14 +28,13 @@ async def get_item(session: AsyncSession, orm_cls: ORM_CLASS, item_id: int) -> O
     return orm_obj
 
 
-async def search_item(session: AsyncSession, qs_param: str) -> ORM_OBJECT:
-    orm_obj = await session.execute(text(f"SELECT * FROM advertisements WHERE advertisements.description LIKE "
-                                         f"'%{qs_param}%'"))
+async def search_item(session: AsyncSession, orm_cls: ORM_CLASS, qs_param: str) -> ORM_OBJECT:
+    statement = select(orm_cls).where(orm_cls.description.like(f"%{qs_param}%"))
+    orm_obj = await session.execute(statement)
+    result = orm_obj.scalars().all()
 
-    if orm_obj is None:
+    if result is None:
         raise HTTPException(status_code=404, detail="Item not found")
-
-    result = orm_obj.mappings().all()
 
     return JSONResponse(content=jsonable_encoder(result))
 
